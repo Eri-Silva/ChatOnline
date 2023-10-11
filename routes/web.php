@@ -2,6 +2,9 @@
 
 use Illuminate\Support\Facades\Route;
 
+//php leitor.php arquivo para ler
+//php-openapi repositorio do github 
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
