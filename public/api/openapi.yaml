@@ -17,24 +17,24 @@ servers:
         default: '8000'
 
 paths:
-  /publicacoes:
+  /chat:
     get:
-      operationId: getPublicacoes
-      summary: Retorna as publicações mais recentes.
+      operationId: getMessage
+      summary: Retorna o chat.
       responses:
         '200':
-          description: 'OK'
+          description: 'Sucesso'
           content: 
             application/json:
               schema:
                 type: array
                 minItems: 0
                 items:
-                  $ref: '#/components/schemas/publicacao'
+                  $ref: '#/components/schemas/mensagem'
     
     post:
-      summary: Cria uma publicação.
-      operationId: postPublicacao
+      summary: Mandar uma mensagem.
+      operationId: postMessage
       security:
         - bearer: []
         - oauth2: []
@@ -46,55 +46,29 @@ paths:
             schema:
               type: object
               properties:
-                autor:
-                  $ref: '#/components/schemas/publicacao/properties/autor'
-                texto:
-                  $ref: '#/components/schemas/publicacao/properties/texto'
+                usuario:
+                  $ref: '#/components/schemas/mensagem/properties/usuario'
+                mensagem:
+                  $ref: '#/components/schemas/mensagem/properties/mensagem'
       responses:
         '201':
-          description: Publicação criada.
+          description: Mensagem enviada.
           links:
             getPublicacaoById:
-              description: O URI da publicação criada.
-              operationId: getPublicacao
+              description: O URI da mensagem enviada.
+              operationId: getMessage
               parameters:
                 id: $response.header.location
 
-  /publicacoes/{id}:
-    get:
-      operationId: getPublicacao
-      summary: Retorna uma publicação.
-      parameters:
-        - $ref: '#components/parameters/idPublicacao'
-      responses:
-        200:
-          description: 'OK'
-          content:
-            application/json:
-              schema:
-                $ref: '#components/schemas/publicacao'
-        404:
-          description: 'Publicação não encontrada.'
+  
 
-    put:
-      summary: Altera uma publicação.
-      parameters:
-        - $ref: '#components/parameters/idPublicacao'
-      responses:
-        200:
-          description: 'OK'
-        404:
-          description: 'Publicação não encontrada.'
+    
 
-    delete:
-      summary: Apaga uma publicação.
-      parameters:
-        - $ref: '#components/parameters/idPublicacao'
-      responses:
-        200:
-          description: 'OK'
-        404:
-          description: 'Publicação não encontrada.'
+   
+
+
+
+
 
   /usuarios:
     get:
@@ -173,26 +147,30 @@ paths:
               schema:
                 $ref: "#/components/schemas/msg"
 
+
+
 components:
   schemas:  
-    publicacao:
+    mensagem:
       type: object
-      description: Uma publicação.
+      description: Uma mensagem.
       properties:
         id:
           type: string
           description: Um identificador gerado pelo sistema.
-          example: 'sd93nk2S'
-        autor:
+          example: '05d05m05az'
+        usuario:
           type: "string"
-          description: O nome de usuário do autor.
-          example: ciromdrs
-        texto:
+          description: o dono da mensagem.
+          example: Vanessa
+        mensagem:
           type: string
-          maxLength: 144
+          maxLength: 350
+          example: Sou tão linda
         criacao:
           type: string
           format: date-time
+
 
     usuario:
       type: object
