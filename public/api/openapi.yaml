@@ -46,8 +46,6 @@ paths:
             schema:
               type: object
               properties:
-                usuario:
-                  $ref: '#/components/schemas/mensagem/properties/usuario'
                 mensagem:
                   $ref: '#/components/schemas/mensagem/properties/mensagem'
       responses:
@@ -60,93 +58,54 @@ paths:
               parameters:
                 id: $response.header.location
 
-  
-
-    
-
-   
-
-
-
-
-
-  /usuarios:
-    get:
-      summary: Retorna a lista de usuários cadastrados.
-      responses:
-        '200':
-          description: 'OK'
-          content: 
-            application/json:
-              schema:
-                type: array
-                minItems: 0
-                items:
-                  $ref: '#/components/schemas/usuario'
-
-    post:
-      summary: Cria um usuário.
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/usuario"
-      responses:
-        "201":
-          description: Criado.
-        "400":
-          description: Faltou algum parâmetro.
-
-  /usuarios/{nome}:
+  /chat/{id}:
     parameters:
       - nome:
-        $ref: "#/components/parameters/nome"
+        $ref: "#/components/parameters/idMensagem"
 
     get:
-      summary: Retorna os dados de um usuário.
+      summary: Retorna os dados de uma mensagem.
       responses:
         '200':
           description: 'OK'
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/usuario'
+                $ref: '#/components/schemas/mensagem'
         '404':
-          description: Não encontrado.
+          description: Mensagem não encontrado.
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/msg"
     
     put:
-      summary: Cria ou altera os dados de um usuário.
+      summary: Cria ou altera os dados de uma mensagem.
       responses:
         '200':
-          description: Alterou.
+          description: Dados alterados.
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/msg"
         '201':
-          description: Criou.
+          description: Dados criados.
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/msg"
 
     delete:
-      summary: Apaga um usuário.
+      summary: Apaga uma mensagem.
       responses:
         '200':
-          description: 'OK'
+          description: 'Mensagem apagada'
         '404':
-          description: Não encontrado.
+          description: Mensagem não encontrada.
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/msg"
-
 
 
 components:
@@ -158,31 +117,18 @@ components:
         id:
           type: string
           description: Um identificador gerado pelo sistema.
-          example: '05d05m05az'
+          example: '01'
         usuario:
           type: "string"
-          description: o dono da mensagem.
+          description: O dono da mensagem.
           example: Vanessa
         mensagem:
           type: string
           maxLength: 350
           example: Sou tão linda
-        criacao:
+        enviada:
           type: string
           format: date-time
-
-
-    usuario:
-      type: object
-      properties:
-        nome:
-          type: string
-          description: Nome usado como identificador.
-          example: alicex
-        nome_perfil: 
-          type: string
-          description: Nome legível, exibido, por exemplo, no perfil.
-          example: Alice Xavier
 
     msg:
       type: object
@@ -209,32 +155,9 @@ components:
 
 
   parameters:
-    idPublicacao:
+    idMensagem:
       in: path
-      name: idPublicacao
+      name: id
       required: true
       schema:
-        $ref: '#components/publicacao/properties/id'
-  
-    nome:
-      in: path
-      name: nome
-      required: true
-      schema:
-        $ref: '#components/usuario/properties/nome'
-  
-
-  securitySchemes:
-    bearer:
-      type: http
-      scheme: bearer
-      bearerFormat: JWT
-
-    oauth2:
-      type: oauth2
-      flows: 
-        implicit:
-          authorizationUrl: https://suap.ifrn.edu.br/api/v2/o/authorize/
-          scopes:
-            write:pets: modify pets in your account
-            read:pets: read your pets
+        $ref: '#components/mensagem/properties/id'
