@@ -2,6 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Models\Chat;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,76 +21,36 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::get('chat',
     function(Request $request) {
+        $chat = Chat::all();
         # Apenas um exemplo de resposta. Os dados deveriam vir do banco.
-        return response()->json([
-            [
-                'id' => 1,
-                'usuario' => 'alice',
-                'mensagem' => 'Minha primeira publicação.',
-                'enviada' => '2023-10-07T15:30:00',
-            ],
-            [
-                'id' => 2,
-                'usuario' => 'bob',
-                'mensagem' => 'Publicação exemplo.',
-                'enviada' => '2023-10-08T07:30:00',
-            ]
-        ]);
+        return response()->json(
+            $chat
+        );
+        
     }
 );
 
 Route::post('chat',
     function(Request $request) {
-        // o certo seria implementar
-        // $request->validate([
-        //     'usuario' => 'required',
-        //     'mensagem' => 'required|max:300',
-        // ]);
+        $call = Chat::create([
+            'usuario' => 'alice',
+            'mensagem' => 'Minha primeira publicação.',
+            
+        ]
+    );
         return response()->json(
-            [
-                'id' => '02',
-                'usuario' => 'ERI',
-                'mensagem' => "IFRN minha casa",
-                'enviada' => '2023-10-08T09:40:00'
-            ],
-            201
+            $call
         );
     }
 );
 
 Route::get('chat/{id}',
     function(Request $request, $id) {
-        if ($id == 1) {
-            return response()->json([
-                'id' => 1,
-                'usuario' => 'alice',
-                'mensagem' => 'Minha primeira publicação.',
-                'enviada' => '2023-10-07T15:30:00',
-            ]);
-        }
 
-        if ($id == 2) {
-            return response()->json([
-                'id' => 2,
-                'usuario' => 'bob',
-                'mensagem' => 'Publicação exemplo.',
-                'enviada' => '2023-10-08T07:30:00',
-            ]);
-        }
+
 
         return response()->json(
-            [
-                'id' => 1,
-                'usuario' => 'alice',
-                'mensagem' => 'Minha primeira publicação.',
-                'enviada' => '2023-10-07T15:30:00',
-            ],
-            [
-                'id' => 2,
-                'usuario' => 'bob',
-                'mensagem' => 'Publicação exemplo.',
-                'enviada' => '2023-10-08T07:30:00',
-            ],
+            $chat,
             404
         );
     }
@@ -98,22 +59,16 @@ Route::get('chat/{id}',
 
 Route::put('chat/{id}',
     function(Request $request, $id) {
-        $request->validate(['texto' => 'max:144']);
-        # Apenas um exemplo de resposta. Os dados deveriam vir do banco.
-        if (in_array($id, [1,2])) {
-            return response()->json(
-                [
-                    'tipo' => 'info',
-                    'conteudo' => "Publicação alterada (mentira, falta implementar isso).",
-                ]
-            );
-        }
+        $request->validate(['mensagem' => 'max:350']);
+        
+        $mensagem = Chat::find($id);
+        // $mensagem->usuario = $request->post('usuario');
+        // $mensagem->mensagem = $request->post('mensagem');
+
+        $mensagem->save();
 
         return response()->json(
-            [
-                'tipo' => 'erro',
-                'conteudo' => 'Não encontrado.'
-            ], 404
+            $mensagem
         );
     }
 );
@@ -127,15 +82,15 @@ Route::delete('chat/{id}',
             return response()->json(
                 [
                     'tipo' => 'info',
-                    'conteudo' => "Publicação apagada (mentira, falta implementar isso).",
+                    'conteudo' => "Mensagem apagada",
                 ]
             );
         }
 
         return response()->json(
             [
-                'tipo' => 'erro',
-                'conteudo' => 'Publicação não encontrada.'
+                'tipo' => 'Erro',
+                'conteudo' => 'Mensagem não encontrada'
             ],
             404
         );

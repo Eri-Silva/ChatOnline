@@ -81,19 +81,21 @@ paths:
     
     put:
       summary: Cria ou altera os dados de uma mensagem.
+      requestBody:
+      
       responses:
         '200':
           description: Dados alterados.
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/msg"
+                $ref: "#/components/schemas/mensagem"
         '201':
           description: Dados criados.
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/msg"
+                $ref: "#/components/schemas/mensagem"
 
     delete:
       summary: Apaga uma mensagem.
@@ -115,7 +117,7 @@ components:
       description: Uma mensagem.
       properties:
         id:
-          type: string
+          type: integer
           description: Um identificador gerado pelo sistema.
           example: '01'
         usuario:
