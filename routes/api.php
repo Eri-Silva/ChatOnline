@@ -64,15 +64,17 @@ Route::put('chat/{id}',
         $request->validate(['mensagem' => 'max:350']);
          $mensagem = Chat::find($id);
 
-        $mensagem->usuario = $request->post('usuario');
+         if ($mensagem != null) {
+             $mensagem->usuario = $request->post('usuario');
         $mensagem->mensagem = $request->post('mensagem');
 
         $mensagem->save();
+            return response($mensagem ,200);
+        }
+       
 
 
-        return response()->json(
-            $mensagem
-        );
+        return response("Essa mensagem não foi encontrada para edição", 404);
     }
 );
 
@@ -83,7 +85,7 @@ Route::delete('chat/{id}',
         $mensagem = Chat::find($id);
         if ($mensagem != null) {
             $mensagem->delete();
-            return response(200);
+            return response("Mensagem deletada",200);
         }
         
 
