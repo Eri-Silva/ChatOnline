@@ -33,11 +33,13 @@ Route::get('chat',
 Route::post('chat',
     function(Request $request) {
         $call = Chat::create([
-            'usuario' => 'alice',
-            'mensagem' => 'Minha primeira publicação.',
+            'usuario' => $request->post('usuario'),
+            'mensagem' => $request->post('mensagem'),
             
         ]
     );
+
+    $call->save();
         return response()->json(
             $call
         );
@@ -46,13 +48,13 @@ Route::post('chat',
 
 Route::get('chat/{id}',
     function(Request $request, $id) {
+        $mensagem = Chat::find($id);
 
+        if ($mensagem != null) {
+            return response($mensagem ,200);
+        }
 
-
-        return response()->json(
-            $chat,
-            404
-        );
+        return response("Não encontramos essa mensagem", 404);
     }
 );
 
@@ -60,12 +62,13 @@ Route::get('chat/{id}',
 Route::put('chat/{id}',
     function(Request $request, $id) {
         $request->validate(['mensagem' => 'max:350']);
-        
-        $mensagem = Chat::find($id);
-        // $mensagem->usuario = $request->post('usuario');
-        // $mensagem->mensagem = $request->post('mensagem');
+         $mensagem = Chat::find($id);
+
+        $mensagem->usuario = $request->post('usuario');
+        $mensagem->mensagem = $request->post('mensagem');
 
         $mensagem->save();
+
 
         return response()->json(
             $mensagem
@@ -77,22 +80,13 @@ Route::put('chat/{id}',
 
 Route::delete('chat/{id}',
     function(Request $request, $id) {
-        # Apenas um exemplo de resposta. Os dados deveriam vir do banco.
-        if (in_array($id, [1,2])) {
-            return response()->json(
-                [
-                    'tipo' => 'info',
-                    'conteudo' => "Mensagem apagada",
-                ]
-            );
+        $mensagem = Chat::find($id);
+        if ($mensagem != null) {
+            $mensagem->delete();
+            return response(200);
         }
+        
 
-        return response()->json(
-            [
-                'tipo' => 'Erro',
-                'conteudo' => 'Mensagem não encontrada'
-            ],
-            404
-        );
+        return response("mensagem não encontrada", 404);
     }
 );

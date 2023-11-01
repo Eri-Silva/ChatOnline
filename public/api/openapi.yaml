@@ -46,6 +46,8 @@ paths:
             schema:
               type: object
               properties:
+                usuario:
+                  $ref: '#/components/schemas/mensagem/properties/usuario'
                 mensagem:
                   $ref: '#/components/schemas/mensagem/properties/mensagem'
       responses:
@@ -57,6 +59,9 @@ paths:
               operationId: getMessage
               parameters:
                 id: $response.header.location
+        '404':
+          description: Mensagem não encontrado.
+        
 
   /chat/{id}:
     parameters:
@@ -74,29 +79,26 @@ paths:
                 $ref: '#/components/schemas/mensagem'
         '404':
           description: Mensagem não encontrado.
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/msg"
     
     put:
       summary: Cria ou altera os dados de uma mensagem.
       requestBody:
-      
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                usuario:
+                  $ref: '#/components/schemas/mensagem/properties/usuario'
+                mensagem:
+                  $ref: '#/components/schemas/mensagem/properties/mensagem'
       responses:
-        '200':
-          description: Dados alterados.
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/mensagem"
-        '201':
-          description: Dados criados.
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/mensagem"
+        200:
+          description: OK
+        404:
+          description: Mensagem não encontrada.
 
+          
     delete:
       summary: Apaga uma mensagem.
       responses:
@@ -104,11 +106,6 @@ paths:
           description: 'Mensagem apagada'
         '404':
           description: Mensagem não encontrada.
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/msg"
-
 
 components:
   schemas:  
@@ -128,18 +125,9 @@ components:
           type: string
           maxLength: 350
           example: Sou tão linda
-        enviada:
+        timestamp:
           type: string
           format: date-time
-
-    msg:
-      type: object
-      properties:
-        tipo:
-          type: string
-          enum: [info, erro]
-        conteudo:
-          type: string
 
 
   responses:
