@@ -61,7 +61,6 @@ Route::get('chat/{id}',
 
 Route::put('chat/{id}',
     function(Request $request, $id) {
-        $request->validate(['mensagem' => 'max:350']);
          $mensagem = Chat::find($id);
 
          if ($mensagem != null) {
