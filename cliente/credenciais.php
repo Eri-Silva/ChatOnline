@@ -1,4 +1,4 @@
 <?php
-
-$usuario = 'matricula';
-$senha = 'senha';
+//lembre de alterar
+$usuario = 'sua_matricula';
+$senha = 'sua_senha';

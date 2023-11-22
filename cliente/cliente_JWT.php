@@ -17,11 +17,11 @@ $token = login_SUAP($usuario, $senha, $cliente_http);
 $dados = acessar_dados($token, $cliente_http);
 
 // Função para exibir as opções e obter a escolha do usuário
-function exibirOpcoes() {
+function exibirOpcoes($dados) {
     echo "\n-------------------------\n";
     echo "\033[1;34m      Chat Online\033[0m\n"; // Cor azul brilhante
     echo "-------------------------";
-    echo "\n Escolha uma opção:\n";
+    echo "\n Olá {$dados['nome_usual']}, escolha uma opção:\n";
     echo "1. Entrar no chat\n";
     echo "2. Ver mensagem específica por ID\n";
     echo "3. Enviar uma mensagem\n";
@@ -32,7 +32,7 @@ function exibirOpcoes() {
 
 do { 
 // Obtém a escolha do usuário
-exibirOpcoes();
+exibirOpcoes($dados);
 $opcao = readline("Digite o número da opção desejada: ");
 
 // Processa a escolha do usuário
@@ -53,6 +53,7 @@ switch ($opcao) {
         // Exibe as mensagens formatadas
         $mensagens = json_decode($response, true);
 
+        echo "\n Chat Online \n";
         foreach ($mensagens as $mensagem) {
             echo "\033[1;36mUsuário:\033[0m " . $mensagem['usuario'] . "\n"; // Cor ciano brilhante
                 echo "\033[1;36mMensagem:\033[0m " . $mensagem['mensagem'] . "\n"; // Cor ciano brilhante
