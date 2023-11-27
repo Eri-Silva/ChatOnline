@@ -30,21 +30,35 @@ Route::get('chat',
     }
 );
 
-Route::post('chat',
-    function(Request $request) {
-        $call = Chat::create([
-            'usuario' => $request->post('usuario'),
-            'mensagem' => $request->post('mensagem'),
+// Route::post('chat',
+//     function(Request $request) {
+//         $call = Chat::create([
+//             'usuario' => $request->post('usuario'),
+//             'mensagem' => $request->post('mensagem'),
             
-        ]
-    );
+//         ]
+//     );
 
-    $call->save();
-        return response()->json(
-            $call
-        );
-    }
-);
+//     $call->save();
+//         return response()->json(
+//             $call
+//         );
+//     }
+// );
+
+Route::post('chat', function(Request $request) {
+    $chat = new Chat;
+    $chat->usuario = $request->input('usuario');
+    $chat->mensagem = $request->input('mensagem');
+    $chat->save();
+
+    $chatId = $chat->id;
+    $uri = url('/chat/' . $chatId);
+
+    //resposta JSON com o status 201 e o cabeçalho Location
+    return response()->json($chat, 201)->header('Location', $uri);
+});
+
 
 Route::get('chat/{id}',
     function(Request $request, $id) {
@@ -59,24 +73,39 @@ Route::get('chat/{id}',
 );
 
 
-Route::put('chat/{id}',
-    function(Request $request, $id) {
-         $mensagem = Chat::find($id);
+// Route::put('chat/{id}',
+//     function(Request $request, $id) {
+//          $mensagem = Chat::find($id);
 
-         if ($mensagem != null) {
-             $mensagem->usuario = $request->post('usuario');
-        $mensagem->mensagem = $request->post('mensagem');
+//          if ($mensagem != null) {
+//              $mensagem->usuario = $request->post('usuario');
+//         $mensagem->mensagem = $request->post('mensagem');
 
-        $mensagem->save();
-            return response($mensagem ,200);
-        }
+//         $mensagem->save();
+//             return response($mensagem ,200);
+//         }
        
 
 
-        return response("Essa mensagem não foi encontrada para edição", 404);
-    }
-);
+//         return response("Essa mensagem não foi encontrada para edição", 404);
+//     }
+// );
 
+Route::put('chat/{id}', function(Request $request, $id) {
+    $mensagem = Chat::find($id);
+
+    if ($mensagem != null) {
+        $mensagem->usuario = $request->input('usuario');
+        $mensagem->mensagem = $request->input('mensagem');
+
+        $mensagem->save();
+        
+        // Retornando uma resposta com status 204 (No Content) sem corpo (sem mensagem alterada)
+        return response("Mensagem editada", 200);
+    }
+
+    return response("Essa mensagem não foi encontrada para edição", 404);
+});
 
 
 Route::delete('chat/{id}',
