@@ -71,48 +71,76 @@ switch ($opcao) {
         }
 
         break;
-    case 2:
-        // Lógica para ver mensagem por ID
-        $mensagemId = readline("Digite o ID da mensagem que deseja ver: ");
-        $urlMensagem = "http://localhost:8000/api/chat/$mensagemId";
 
-        $curlMensagem = curl_init();
 
-        curl_setopt($curlMensagem, CURLOPT_URL, $urlMensagem);
-        curl_setopt($curlMensagem, CURLOPT_RETURNTRANSFER, true);
+        case 2:
+            // Lógica para ver mensagem por ID
+            $mensagemId = readline("Digite o ID da mensagem que deseja ver: ");
+            $urlMensagem = "http://localhost:8000/api/chat/$mensagemId";
+        
+            $curlMensagem = curl_init();
+        
+            curl_setopt($curlMensagem, CURLOPT_URL, $urlMensagem);
+            curl_setopt($curlMensagem, CURLOPT_RETURNTRANSFER, true);
+        
+            $responseMensagem = curl_exec($curlMensagem);
+        
+            curl_close($curlMensagem);
+        
+            echo "\033[1;32mMensagem específica por ID:\033[0m\n";
+        
+            // Decodificando o JSON
+            $mensagem = json_decode($responseMensagem, true);
+        
+            if ($mensagem !== null) {
+                // Exibindo a mensagem de forma bonita
+                echo "ID: " . $mensagem['id'] . "\n";
+                echo "Usuário: " . $mensagem['usuario'] . "\n";
+                echo "Mensagem: " . $mensagem['mensagem'] . "\n";
+                echo "Data e Hora: " . $mensagem['updated_at'] . "\n";
+            } else {
+                echo "$responseMensagem\n";
+            }
+        
+            break;
+        
 
-        $responseMensagem = curl_exec($curlMensagem);
-
-        curl_close($curlMensagem);
-       
-        echo "\033[1;32mMensagem específica por ID:\033[0m\n";
-        echo $responseMensagem . "\n";
-        break;
-
-    case 3:
-        // Lógica para enviar uma mensagem
-        $usuario = readline("Digite o nome de usuário: ");
-        $mensagemTexto = readline("Digite a mensagem: ");
-
-        $curlEnviarMensagem = curl_init();
-        $urlEnviarMensagem = 'http://localhost:8000/api/chat';
-        $dataEnviarMensagem = [
-            'usuario' => $usuario,
-            'mensagem' => $mensagemTexto,
-        ];
-
-        curl_setopt($curlEnviarMensagem, CURLOPT_URL, $urlEnviarMensagem);
-        curl_setopt($curlEnviarMensagem, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($curlEnviarMensagem, CURLOPT_POST, true);
-        curl_setopt($curlEnviarMensagem, CURLOPT_POSTFIELDS, $dataEnviarMensagem);
-
-        $responseEnviarMensagem = curl_exec($curlEnviarMensagem);
-
-        curl_close($curlEnviarMensagem);
-
-        echo "\033[1;32mMensagem enviada:\033[0m\n";
-        echo $responseEnviarMensagem . "\n";
-        break;
+            case 3:
+                // Lógica para enviar uma mensagem
+                $usuario = readline("Digite o nome de usuário: ");
+                $mensagemTexto = readline("Digite a mensagem: ");
+            
+                $curlEnviarMensagem = curl_init();
+                $urlEnviarMensagem = 'http://localhost:8000/api/chat';
+                $dataEnviarMensagem = [
+                    'usuario' => $usuario,
+                    'mensagem' => $mensagemTexto,
+                ];
+            
+                curl_setopt($curlEnviarMensagem, CURLOPT_URL, $urlEnviarMensagem);
+                curl_setopt($curlEnviarMensagem, CURLOPT_RETURNTRANSFER, true);
+                curl_setopt($curlEnviarMensagem, CURLOPT_POST, true);
+                curl_setopt($curlEnviarMensagem, CURLOPT_POSTFIELDS, $dataEnviarMensagem);
+            
+                $responseEnviarMensagem = curl_exec($curlEnviarMensagem);
+            
+                curl_close($curlEnviarMensagem);
+            
+                echo "\033[1;32mMensagem enviada:\033[0m\n";
+        
+                $respostaDecodificada = json_decode($responseEnviarMensagem, true);
+            
+                if ($respostaDecodificada !== null) {
+                    // Exibindo a resposta de forma bonita
+                    echo "Usuário: " . $respostaDecodificada['usuario'] . "\n";
+                    echo "Mensagem: " . $respostaDecodificada['mensagem'] . "\n";
+                    echo "ID da nova mensagem: " . $respostaDecodificada['id'] . "\n";
+                } else {
+                    echo "Erro ao decodificar a resposta JSON.\n";
+                }
+            
+                break;
+            
 
 
         case 4:
@@ -167,7 +195,7 @@ switch ($opcao) {
         curl_close($curlEditarMensagem);
 
         // Exibe o resultado
-        echo "\033[1;32mMensagem editada:\033[0m\n";
+        echo "\033[1;32mDesfecho:\033[0m\n";
         echo $responseEditarMensagem . "\n";
     }
     break;
