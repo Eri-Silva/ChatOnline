@@ -2,6 +2,8 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
+use App\Http\Middleware\VerificarTokenSUAP;
 use App\Models\Chat;
 
 /*
@@ -30,7 +32,8 @@ Route::get('chat',
     }
 );
 
-Route::post('chat',
+
+Route::middleware(VerificarTokenSUAP::class)->post('chat',
     function(Request $request) {
         $call = Chat::create([
             'usuario' => $request->post('usuario'),

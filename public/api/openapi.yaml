@@ -37,7 +37,6 @@ paths:
       operationId: postMessage
       security:
         - bearer: []
-        - oauth2: []
       
       requestBody:
         required: true
@@ -82,6 +81,8 @@ paths:
     
     put:
       summary: Cria ou altera os dados de uma mensagem.
+      security:
+        - bearer: []
       requestBody:
         content:
           application/json:
@@ -101,6 +102,8 @@ paths:
           
     delete:
       summary: Apaga uma mensagem.
+      security:
+        - bearer: []
       responses:
         '200':
           description: 'Mensagem apagada'
@@ -151,3 +154,9 @@ components:
       required: true
       schema:
         $ref: '#components/mensagem/properties/id'
+
+  securitySchemes:
+    bearer: # Apelido para o esquema de segurança
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

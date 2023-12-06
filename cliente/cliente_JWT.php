@@ -3,13 +3,13 @@
 require 'credenciais.php';
 require 'vendor/autoload.php';
 
-use GuzzleHttp\Client;
+use GuzzleHttp\Client as GuzzleClient;
+use GuzzleHttp\Exception\GuzzleException;
 
-# VARIÁVEIS E CONSTANTES
 
 const URL_SUAP_API = 'https://suap.ifrn.edu.br/api/v2';
 
-$cliente_http = new Client(['cookies' => true]);
+$cliente_http = new GuzzleClient(['cookies' => true]);
 
 # PROGRAMA PRINCIPAL
 
@@ -38,10 +38,18 @@ $opcao = readline("Digite o número da opção desejada: ");
 // Processa a escolha do usuário
 switch ($opcao) {
     case 1:
+        // entrarNoChat($cliente_http, $token);
+
         // Lógica para entrar no chat
         $curl = curl_init();
 
         $url = 'http://localhost:8000/api/chat';
+
+        // $response = $cliente_http->get($url, [
+        //     'headers' => [
+        //         'Authorization' => 'Bearer ' . $token,
+        //     ],
+        // ]);
 
         curl_setopt($curl, CURLOPT_URL, $url);
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
@@ -195,7 +203,7 @@ switch ($opcao) {
 
 } while ($opcao != 0);
 
-# FUNÇÕES
+// FUNÇÕES DO SUAP
 
 function login_SUAP($usuario, $senha, $cliente_http): string {
     // Prepara os dados da requisição
@@ -227,5 +235,32 @@ function acessar_dados($token, $cliente_http): array {
     );
     $dados = json_decode($res->getBody(), associative: true);
     return $dados;
+}
+
+
+// FUNÇÕES  DO CHAT
+
+function entrarNoChat($cliente_http, $token) {
+    
+}
+
+function verMensagemPorId() {
+    // Lógica para ver mensagem por ID
+    // ...
+}
+
+function enviarMensagem($cliente_http, $token) {
+    // Lógica para enviar uma mensagem
+    // ...
+}
+
+function editarMensagem($cliente_http, $token) {
+    // Lógica para editar uma mensagem
+    // ...
+}
+
+function apagarMensagem($cliente_http, $token) {
+    // Lógica para apagar uma mensagem
+    // ...
 }
 ?>
