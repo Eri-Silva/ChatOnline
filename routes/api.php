@@ -32,20 +32,11 @@ Route::get('chat',
     }
 );
 
-<<<<<<< HEAD
-
-Route::middleware(VerificarTokenSUAP::class)->post('chat',
-    function(Request $request) {
-        $call = Chat::create([
-            'usuario' => $request->post('usuario'),
-            'mensagem' => $request->post('mensagem'),
-=======
 // Route::post('chat',
 //     function(Request $request) {
 //         $call = Chat::create([
 //             'usuario' => $request->post('usuario'),
 //             'mensagem' => $request->post('mensagem'),
->>>>>>> 5032e876e7bbb665b3c8473e4667c38ca66d2341
             
 //         ]
 //     );

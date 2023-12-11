@@ -80,13 +80,7 @@ paths:
           description: Mensagem não encontrado.
     
     put:
-<<<<<<< HEAD
-      summary: Cria ou altera os dados de uma mensagem.
-      security:
-        - bearer: []
-=======
       summary: Altera os dados de uma mensagem existente.
->>>>>>> 5032e876e7bbb665b3c8473e4667c38ca66d2341
       requestBody:
         content:
           application/json:
